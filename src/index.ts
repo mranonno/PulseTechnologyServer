@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/db";
 import authRoutes from "./routes/authRoutes";
+import productRoutes from "./routes/productRoutes";
 
 // Load environment variables
 dotenv.config();
@@ -21,7 +22,20 @@ connectDB();
 app.get("/", (_: Request, res: Response) => {
   res.send("🚀 PulseTechnologyServer is running!");
 });
+
+// process.on("uncaughtException", (err) => {
+//   console.error("Uncaught Exception:", err);
+//   process.exit(1);
+// });
+
+// process.on("unhandledRejection", (err) => {
+//   console.error("Unhandled Rejection:", err);
+//   process.exit(1);
+// });
+
+// Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/products", productRoutes);
 
 // Start server
 const PORT = process.env.PORT || 5000;

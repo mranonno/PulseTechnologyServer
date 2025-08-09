@@ -2,6 +2,9 @@ import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const JWT_SECRET = (process.env.JWT_SECRET as string) || "c2e2acfb94c9e56db7a";
 
@@ -37,7 +40,7 @@ export const registerUser = async (req: Request, res: Response) => {
     await newUser.save();
 
     const token = jwt.sign(
-      { userId: newUser._id, role: newUser.role },
+      { id: newUser._id, role: newUser.role },
       JWT_SECRET,
       { expiresIn: "180d" }
     );
@@ -93,8 +96,8 @@ export const loginUser = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Invalid credentials." });
     }
 
-    const token = jwt.sign({ userId: user._id, role: user.role }, JWT_SECRET, {
-      expiresIn: "7d",
+    const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, {
+      expiresIn: "180d",
     });
 
     res.json({
