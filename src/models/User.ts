@@ -1,23 +1,23 @@
-import mongoose, { Schema, Document } from "mongoose";
+// models/User.ts
+import mongoose, { Document, Schema } from "mongoose";
 
 export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
-  role: "admin" | "staff";
-  createdAt: Date;
+  role: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
-const userSchema: Schema = new Schema<IUser>(
+const UserSchema: Schema = new Schema<IUser>(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    role: { type: String, enum: ["admin", "staff"], default: "staff" },
+    role: { type: String, required: true },
   },
-  {
-    timestamps: true, // ⬅️ Enables createdAt and updatedAt automatically
-  }
+  { timestamps: true }
 );
 
-export default mongoose.model<IUser>("User", userSchema);
+export default mongoose.model<IUser>("User", UserSchema);
