@@ -1,5 +1,9 @@
 import express from "express";
-import { addProduct, updateProduct } from "../controllers/productController";
+import {
+  addProduct,
+  allProduct,
+  updateProduct,
+} from "../controllers/productController";
 import { upload } from "../middleware/uploadCloudinary";
 import { protect } from "../middleware/authMiddleware";
 import {
@@ -17,6 +21,7 @@ router.post(
   validateAddProduct,
   addProduct
 );
+router.get("/", allProduct);
 
 router.put(
   "/:id",

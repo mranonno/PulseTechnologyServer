@@ -77,3 +77,24 @@ export const updateProduct = async (req: MulterRequest, res: Response) => {
     res.status(500).json({ message: "Server error", error: message });
   }
 };
+
+export const allProduct = async (req: Request, res: Response) => {
+  try {
+    const products = await Product.find().sort({ createdAt: -1 });
+    res.status(200).json({
+      message: "Products fetched successfully ✅",
+      total: products.length,
+      products,
+    });
+  } catch (err: unknown) {
+    console.error("❌ Fetch all products error:", err);
+    const message =
+      err &&
+      typeof err === "object" &&
+      "message" in err &&
+      typeof err.message === "string"
+        ? err.message
+        : String(err);
+    res.status(500).json({ message: "Server error", error: message });
+  }
+};
