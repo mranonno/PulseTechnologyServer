@@ -4,7 +4,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import asyncHandler from "express-async-handler";
 import User, { IUser } from "../models/User";
 
-// Extend Request to hold `user`
+// ✅ Make `user` always required for protected routes
 export interface AuthRequest extends Request {
   user?: IUser;
 }
@@ -13,31 +13,25 @@ export interface AuthRequest extends Request {
 // PROTECT (Authentication)
 // ========================
 export const protect = asyncHandler(
-  async (req: AuthRequest, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     let token: string | undefined;
 
-    // Check if Authorization header exists and starts with Bearer
     if (
       req.headers.authorization &&
       req.headers.authorization.startsWith("Bearer ")
     ) {
       try {
-        // Extract token
         token = req.headers.authorization.split(" ")[1];
 
         if (!process.env.JWT_SECRET) {
           throw new Error("JWT_SECRET not configured");
         }
 
-        // Verify token
         const decoded = jwt.verify(
           token,
           process.env.JWT_SECRET
-        ) as JwtPayload & {
-          id: string;
-        };
+        ) as JwtPayload & { id: string };
 
-        // Find user by ID without password
         const user = await User.findById(decoded.id).select("-password");
 
         if (!user) {
@@ -45,7 +39,8 @@ export const protect = asyncHandler(
           throw new Error("User not found");
         }
 
-        req.user = user;
+        // ✅ Now cast req to AuthRequest so TS knows user exists
+        (req as AuthRequest).user = user;
         return next();
       } catch (error) {
         console.error("Auth Error:", error);
@@ -67,13 +62,12 @@ export const authorize =
   (req: AuthRequest, res: Response, next: NextFunction) => {
     if (!req.user) {
       res.status(401);
-      throw new Error("Not authenticated");
+      throw new Error("Not authorized, user missing");
     }
 
     if (!roles.includes(req.user.role)) {
       res.status(403);
       throw new Error("Not authorized to access this resource");
     }
-
     next();
   };
