@@ -4,7 +4,8 @@ import asyncHandler from "express-async-handler";
 
 export const addProductSchema = Joi.object({
   name: Joi.string().trim().min(3).max(100).required(),
-  productModel: Joi.string().trim().min(1).max(50).required(),
+  productModel: Joi.string().trim().min(1).max(50).optional(),
+  productOrigin: Joi.string().trim().min(1).max(50).optional(),
   description: Joi.string().trim().max(1000).optional(),
   price: Joi.number().positive().required(),
   quantity: Joi.number().integer().min(0).required(),
@@ -13,6 +14,7 @@ export const addProductSchema = Joi.object({
 export const updateProductSchema = Joi.object({
   name: Joi.string().trim().min(3).max(100).optional(),
   productModel: Joi.string().trim().min(1).max(50).optional(),
+  productOrigin: Joi.string().trim().min(1).max(50).optional(),
   description: Joi.string().trim().max(1000).optional(),
   price: Joi.number().positive().optional(),
   quantity: Joi.number().integer().min(0).optional(),
