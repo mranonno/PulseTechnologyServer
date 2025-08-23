@@ -1,36 +1,26 @@
 import { Request, Response, NextFunction } from "express";
 import Joi, { ObjectSchema } from "joi";
 
-/**
- * ========================
- * Product Schemas
- * ========================
- */
 export const addProductSchema = Joi.object({
-  name: Joi.string().trim().min(3).max(100).required(),
-  productModel: Joi.string().trim().min(1).max(50).optional(),
-  productOrigin: Joi.string().trim().min(1).max(50).optional(),
-  description: Joi.string().trim().max(1000).optional(),
+  name: Joi.string().trim().min(1).max(100).required(),
+  productModel: Joi.string().trim().max(50).optional().allow(""),
+  productOrigin: Joi.string().trim().max(50).optional().allow(""),
+  description: Joi.string().trim().max(1000).optional().allow(""),
   price: Joi.number().positive().required(),
   quantity: Joi.number().integer().min(0).required(),
-}).unknown(false);
+}).unknown(true);
 
 export const updateProductSchema = Joi.object({
-  name: Joi.string().trim().min(3).max(100).optional(),
-  productModel: Joi.string().trim().min(1).max(50).optional(),
-  productOrigin: Joi.string().trim().min(1).max(50).optional(),
-  description: Joi.string().trim().max(1000).optional(),
+  name: Joi.string().trim().min(1).max(100).optional(),
+  productModel: Joi.string().trim().max(50).optional().allow(""),
+  productOrigin: Joi.string().trim().max(50).optional().allow(""),
+  description: Joi.string().trim().max(1000).optional().allow(""),
   price: Joi.number().positive().optional(),
   quantity: Joi.number().integer().min(0).optional(),
 })
   .min(1)
-  .unknown(false);
+  .unknown(true);
 
-/**
- * ========================
- * Validation Middleware
- * ========================
- */
 export const validate =
   (schema: ObjectSchema) =>
   (req: Request, res: Response, next: NextFunction) => {
