@@ -7,16 +7,12 @@ interface MulterRequest extends Request {
 
 export const addProduct = async (req: MulterRequest, res: Response) => {
   console.log(req.body);
-  const { name, description, price, quantity, productModel } = req.body;
+  const { name, description, price, quantity, productModel, productOrigin } =
+    req.body;
   const imageUrl = req.file?.path;
 
   try {
-    if (
-      !name ||
-      !productModel ||
-      price === undefined ||
-      quantity === undefined
-    ) {
+    if (!name || price === undefined || quantity === undefined) {
       return res.status(400).json({
         message: "Name, product model, price, and quantity are required.",
       });
@@ -29,6 +25,7 @@ export const addProduct = async (req: MulterRequest, res: Response) => {
       price: Number(price),
       quantity: Number(quantity),
       image: imageUrl,
+      productOrigin,
     });
 
     await product.save();
@@ -47,7 +44,8 @@ export const addProduct = async (req: MulterRequest, res: Response) => {
 
 export const updateProduct = async (req: MulterRequest, res: Response) => {
   const productId = req.params.id;
-  const { name, description, price, quantity, productModel } = req.body;
+  const { name, description, price, quantity, productModel, productOrigin } =
+    req.body;
   const imageUrl = req.file?.path;
 
   try {
@@ -56,6 +54,7 @@ export const updateProduct = async (req: MulterRequest, res: Response) => {
 
     if (name !== undefined) product.name = name;
     if (productModel !== undefined) product.productModel = productModel;
+    if (productOrigin !== undefined) product.productOrigin = productOrigin;
     if (description !== undefined) product.description = description;
     if (price !== undefined) product.price = Number(price);
     if (quantity !== undefined) product.quantity = Number(quantity);
