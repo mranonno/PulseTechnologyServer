@@ -21,6 +21,7 @@ export const addProduct = async (req: MulterRequest, res: Response) => {
     const product = new Product({
       name,
       productModel,
+      productOrigin,
       description,
       price: Number(price),
       quantity: Number(quantity),
