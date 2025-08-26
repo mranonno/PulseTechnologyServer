@@ -26,7 +26,6 @@ export const addProduct = async (req: MulterRequest, res: Response) => {
       price: Number(price),
       quantity: Number(quantity),
       image: imageUrl,
-      productOrigin,
     });
 
     await product.save();

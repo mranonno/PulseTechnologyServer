@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import Joi, { ObjectSchema } from "joi";
 
+// ---------------- PRODUCT VALIDATION ----------------
 export const addProductSchema = Joi.object({
   name: Joi.string().trim().min(1).max(100).required(),
   productModel: Joi.string().trim().max(50).optional().allow(""),
@@ -21,6 +22,26 @@ export const updateProductSchema = Joi.object({
   .min(1)
   .unknown(true);
 
+// ---------------- PRICE LIST VALIDATION ----------------
+export const addPriceListSchema = Joi.object({
+  name: Joi.string().trim().min(1).max(100).required(), // ✅ only required field
+  price1: Joi.number().positive().optional(),
+  price2: Joi.number().positive().optional(),
+  price3: Joi.number().positive().optional(),
+  vendorName: Joi.string().trim().min(1).max(100).optional(),
+}).unknown(true);
+
+export const updatePriceListSchema = Joi.object({
+  name: Joi.string().trim().min(1).max(100).optional(),
+  price1: Joi.number().positive().optional(),
+  price2: Joi.number().positive().optional(),
+  price3: Joi.number().positive().optional(),
+  vendorName: Joi.string().trim().min(1).max(100).optional(),
+})
+  .min(1) // require at least one field to update
+  .unknown(true);
+
+// ---------------- GENERIC VALIDATOR ----------------
 export const validate =
   (schema: ObjectSchema) =>
   (req: Request, res: Response, next: NextFunction) => {
@@ -39,3 +60,5 @@ export const validate =
 
 export const validateAddProduct = validate(addProductSchema);
 export const validateUpdateProduct = validate(updateProductSchema);
+export const validateAddPriceList = validate(addPriceListSchema);
+export const validateUpdatePriceList = validate(updatePriceListSchema);
