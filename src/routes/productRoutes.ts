@@ -2,6 +2,7 @@ import express from "express";
 import {
   addProduct,
   allProduct,
+  deleteProduct,
   updateProduct,
 } from "../controllers/productController";
 import { upload } from "../middleware/uploadCloudinary";
@@ -22,6 +23,7 @@ router.post(
   addProduct
 );
 router.get("/", allProduct);
+router.delete("/:id", deleteProduct);
 
 router.put(
   "/:id",

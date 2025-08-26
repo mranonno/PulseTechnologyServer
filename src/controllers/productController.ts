@@ -90,6 +90,28 @@ export const allProduct = async (req: Request, res: Response) => {
   }
 };
 
+export const deleteProduct = async (req: Request, res: Response) => {
+  const productId = req.params.id;
+
+  try {
+    const product = await Product.findByIdAndDelete(productId);
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found ❌" });
+    }
+
+    res.status(200).json({
+      message: "Product deleted successfully ✅",
+      product,
+    });
+  } catch (err: unknown) {
+    console.error("❌ Delete product error:", err);
+    res
+      .status(500)
+      .json({ message: "Server error", error: getErrorMessage(err) });
+  }
+};
+
 // Helper to extract message from unknown error
 function getErrorMessage(err: unknown): string {
   return err && typeof err === "object" && "message" in err
