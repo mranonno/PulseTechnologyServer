@@ -7,19 +7,27 @@ interface MulterRequest extends Request {
 
 export const addProduct = async (req: MulterRequest, res: Response) => {
   console.log(req.body);
-  const { name, description, price, quantity, productModel, productOrigin } =
-    req.body;
+  const {
+    name,
+    description,
+    price,
+    quantity,
+    productModel,
+    productOrigin,
+    productBrand,
+  } = req.body;
   const imageUrl = req.file?.path;
 
   try {
     if (!name || price === undefined || quantity === undefined) {
       return res.status(400).json({
-        message: "Name, product model, price, and quantity are required.",
+        message: "Name, price, and quantity are required.",
       });
     }
 
     const product = new Product({
       name,
+      productBrand,
       productModel,
       productOrigin,
       description,
@@ -44,8 +52,15 @@ export const addProduct = async (req: MulterRequest, res: Response) => {
 
 export const updateProduct = async (req: MulterRequest, res: Response) => {
   const productId = req.params.id;
-  const { name, description, price, quantity, productModel, productOrigin } =
-    req.body;
+  const {
+    name,
+    description,
+    price,
+    quantity,
+    productModel,
+    productOrigin,
+    productBrand,
+  } = req.body;
   const imageUrl = req.file?.path;
 
   try {
@@ -53,6 +68,7 @@ export const updateProduct = async (req: MulterRequest, res: Response) => {
     if (!product) return res.status(404).json({ message: "Product not found" });
 
     if (name !== undefined) product.name = name;
+    if (productBrand !== undefined) product.productBrand = productBrand;
     if (productModel !== undefined) product.productModel = productModel;
     if (productOrigin !== undefined) product.productOrigin = productOrigin;
     if (description !== undefined) product.description = description;

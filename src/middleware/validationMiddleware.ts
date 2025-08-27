@@ -4,18 +4,20 @@ import Joi, { ObjectSchema } from "joi";
 // ---------------- PRODUCT VALIDATION ----------------
 export const addProductSchema = Joi.object({
   name: Joi.string().trim().min(1).max(100).required(),
-  productModel: Joi.string().trim().max(50).optional().allow(""),
-  productOrigin: Joi.string().trim().max(50).optional().allow(""),
-  description: Joi.string().trim().max(1000).optional().allow(""),
+  productBrand: Joi.string().trim().min(1).max(50).optional().allow(""),
+  productModel: Joi.string().trim().min(1).max(50).optional().allow(""),
+  productOrigin: Joi.string().trim().min(1).max(50).optional().allow(""),
+  description: Joi.string().trim().min(1).max(1000).optional().allow(""),
   price: Joi.number().positive().required(),
   quantity: Joi.number().integer().min(0).required(),
 }).unknown(true);
 
 export const updateProductSchema = Joi.object({
   name: Joi.string().trim().min(1).max(100).optional(),
-  productModel: Joi.string().trim().max(50).optional().allow(""),
-  productOrigin: Joi.string().trim().max(50).optional().allow(""),
-  description: Joi.string().trim().max(1000).optional().allow(""),
+  productBrand: Joi.string().trim().min(1).max(50).optional().allow(""),
+  productModel: Joi.string().trim().min(1).max(50).optional().allow(""),
+  productOrigin: Joi.string().trim().min(1).max(50).optional().allow(""),
+  description: Joi.string().trim().min(1).max(1000).optional().allow(""),
   price: Joi.number().positive().optional(),
   quantity: Joi.number().integer().min(0).optional(),
 })
@@ -24,7 +26,7 @@ export const updateProductSchema = Joi.object({
 
 // ---------------- PRICE LIST VALIDATION ----------------
 export const addPriceListSchema = Joi.object({
-  name: Joi.string().trim().min(1).max(100).required(), // ✅ only required field
+  name: Joi.string().trim().min(1).max(100).required(),
   price1: Joi.number().positive().optional(),
   price2: Joi.number().positive().optional(),
   price3: Joi.number().positive().optional(),
@@ -38,7 +40,7 @@ export const updatePriceListSchema = Joi.object({
   price3: Joi.number().positive().optional(),
   vendorName: Joi.string().trim().min(1).max(100).optional(),
 })
-  .min(1) // require at least one field to update
+  .min(1)
   .unknown(true);
 
 // ---------------- GENERIC VALIDATOR ----------------
