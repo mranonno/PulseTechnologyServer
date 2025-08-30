@@ -4,6 +4,7 @@ import {
   allProduct,
   deleteProduct,
   updateProduct,
+  updateStock,
 } from "../controllers/productController";
 import { upload } from "../middleware/uploadCloudinary";
 import { protect } from "../middleware/authMiddleware";
@@ -23,8 +24,8 @@ router.post(
   addProduct
 );
 router.get("/", allProduct);
-router.delete("/:id", deleteProduct);
-
+router.delete("/:id", protect, deleteProduct);
+router.patch("/stock/:id", protect, updateStock);
 router.put(
   "/:id",
   protect,

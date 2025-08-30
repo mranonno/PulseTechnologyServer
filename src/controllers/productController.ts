@@ -128,6 +128,54 @@ export const deleteProduct = async (req: Request, res: Response) => {
   }
 };
 
+interface StockUpdateRequest extends Request {
+  body: {
+    type: "in" | "out";
+    quantity: number;
+  };
+}
+
+// Update stock
+export const updateStock = async (req: StockUpdateRequest, res: Response) => {
+  const productId = req.params.id;
+  const { type, quantity } = req.body;
+
+  if (!type || !quantity || quantity <= 0) {
+    return res
+      .status(400)
+      .json({ message: "Valid type and quantity are required." });
+  }
+
+  try {
+    const product = await Product.findById(productId);
+    if (!product)
+      return res.status(404).json({ message: "Product not found ❌" });
+
+    if (type === "in") {
+      product.quantity += quantity;
+    } else if (type === "out") {
+      if (product.quantity < quantity) {
+        return res
+          .status(400)
+          .json({ message: "Not enough stock to remove ❌" });
+      }
+      product.quantity -= quantity;
+    }
+
+    await product.save();
+
+    res.status(200).json({
+      message: "Stock updated successfully ✅",
+      product,
+    });
+  } catch (err: unknown) {
+    console.error("❌ Update stock error:", err);
+    res
+      .status(500)
+      .json({ message: "Server error", error: getErrorMessage(err) });
+  }
+};
+
 // Helper to extract message from unknown error
 function getErrorMessage(err: unknown): string {
   return err && typeof err === "object" && "message" in err
