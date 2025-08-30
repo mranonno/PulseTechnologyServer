@@ -9,10 +9,10 @@ dotenv.config();
 const JWT_SECRET = (process.env.JWT_SECRET as string) || "c2e2acfb94c9e56db7a";
 
 export const registerUser = async (req: Request, res: Response) => {
-  const { name, email, password, role } = req.body;
+  const { name, email, password, role, image, userId } = req.body;
 
   try {
-    if (!name || !email || !password || !role) {
+    if (!name || !email || !password || !role || !image || !userId) {
       return res.status(400).json({ message: "All fields are required." });
     }
 
@@ -32,9 +32,11 @@ export const registerUser = async (req: Request, res: Response) => {
 
     const newUser = new User({
       name,
+      userId,
       email,
       password: hashedPassword,
       role,
+      image,
     });
 
     await newUser.save();
@@ -49,9 +51,11 @@ export const registerUser = async (req: Request, res: Response) => {
       message: "User registered successfully ✅",
       user: {
         id: newUser._id,
+        userId: newUser?.userId,
         name: newUser.name,
         email: newUser.email,
         role: newUser.role,
+        image: newUser.image,
         createdAt: newUser.createdAt,
       },
       token,
@@ -104,9 +108,11 @@ export const loginUser = async (req: Request, res: Response) => {
       message: "Login successful ✅",
       user: {
         id: user._id,
+        userId: user.userId,
         name: user.name,
         email: user.email,
         role: user.role,
+        image: user.image,
         createdAt: user.createdAt,
       },
       token,

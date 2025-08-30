@@ -1,12 +1,13 @@
-// models/User.ts
 import mongoose, { Document, Schema } from "mongoose";
 import bcrypt from "bcryptjs";
 
 export interface IUser extends Document {
+  userId?: string;
   name: string;
   email: string;
   password: string;
   role: "admin" | "user";
+  image?: string;
   createdAt?: Date;
   updatedAt?: Date;
   matchPassword(enteredPassword: string): Promise<boolean>;
@@ -23,11 +24,9 @@ const UserSchema = new Schema<IUser>(
       match: [/^\S+@\S+\.\S+$/, "Please use a valid email address"],
     },
     password: { type: String, required: [true, "Password is required"] },
-    role: {
-      type: String,
-      enum: ["admin", "user"],
-      default: "user",
-    },
+    role: { type: String, enum: ["admin", "user"], default: "user" },
+    userId: { type: String },
+    image: { type: String },
   },
   { timestamps: true }
 );
@@ -41,19 +40,8 @@ UserSchema.pre("save", async function (next) {
 });
 
 // Match entered password to hashed password
-
-UserSchema.methods.matchPassword = async function (
-  this: IUser,
-  enteredPassword: string
-) {
+UserSchema.methods.matchPassword = async function (enteredPassword: string) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
 export default mongoose.model<IUser>("User", UserSchema);
-
-UserSchema.methods.matchPassword = async function (
-  this: IUser,
-  enteredPassword: string
-) {
-  return await bcrypt.compare(enteredPassword, this.password);
-};
