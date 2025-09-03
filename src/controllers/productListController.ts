@@ -4,7 +4,7 @@ import PriceList from "../models/PriceList";
 // @desc   Get all price list items
 export const getPriceList = async (_: Request, res: Response) => {
   try {
-    const items = await PriceList.find();
+    const items = await PriceList.find().sort({ createdAt: -1 });
     res.json(items);
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch price list", error });

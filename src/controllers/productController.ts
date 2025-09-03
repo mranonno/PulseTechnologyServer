@@ -106,6 +106,28 @@ export const allProduct = async (req: Request, res: Response) => {
   }
 };
 
+export const getProductById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const product = await Product.findById(id);
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found ❌" });
+    }
+
+    res.status(200).json({
+      message: "Product fetched successfully ✅",
+      product,
+    });
+  } catch (err: unknown) {
+    console.error("❌ Fetch product by ID error:", err);
+    res
+      .status(500)
+      .json({ message: "Server error", error: getErrorMessage(err) });
+  }
+};
+
 export const deleteProduct = async (req: Request, res: Response) => {
   const productId = req.params.id;
 

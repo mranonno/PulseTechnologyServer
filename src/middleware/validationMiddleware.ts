@@ -27,17 +27,17 @@ export const updateProductSchema = Joi.object({
 // ---------------- PRICE LIST VALIDATION ----------------
 export const addPriceListSchema = Joi.object({
   name: Joi.string().trim().min(1).max(100).required(),
-  price1: Joi.number().positive().optional(),
-  price2: Joi.number().positive().optional(),
-  price3: Joi.number().positive().optional(),
+  price1: Joi.string().trim().max(100).optional().allow(""),
+  price2: Joi.string().trim().max(100).optional().allow(""),
+  price3: Joi.string().trim().max(100).optional().allow(""),
   vendorName: Joi.string().trim().min(1).max(100).optional(),
 }).unknown(true);
 
 export const updatePriceListSchema = Joi.object({
   name: Joi.string().trim().min(1).max(100).optional(),
-  price1: Joi.number().positive().optional(),
-  price2: Joi.number().positive().optional(),
-  price3: Joi.number().positive().optional(),
+  price1: Joi.string().trim().max(100).optional().allow(""),
+  price2: Joi.string().trim().max(100).optional().allow(""),
+  price3: Joi.string().trim().max(100).optional().allow(""),
   vendorName: Joi.string().trim().min(1).max(100).optional(),
 })
   .min(1)
