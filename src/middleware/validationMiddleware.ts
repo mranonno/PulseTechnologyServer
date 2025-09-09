@@ -30,7 +30,9 @@ export const addPriceListSchema = Joi.object({
   price1: Joi.string().trim().max(100).optional().allow(""),
   price2: Joi.string().trim().max(100).optional().allow(""),
   price3: Joi.string().trim().max(100).optional().allow(""),
-  vendorName: Joi.string().trim().min(1).max(100).optional(),
+  vendorName1: Joi.string().trim().min(1).max(100).optional(),
+  vendorName2: Joi.string().trim().min(1).max(100).optional(),
+  vendorName3: Joi.string().trim().min(1).max(100).optional(),
 }).unknown(true);
 
 export const updatePriceListSchema = Joi.object({
@@ -38,10 +40,10 @@ export const updatePriceListSchema = Joi.object({
   price1: Joi.string().trim().max(100).optional().allow(""),
   price2: Joi.string().trim().max(100).optional().allow(""),
   price3: Joi.string().trim().max(100).optional().allow(""),
-  vendorName: Joi.string().trim().min(1).max(100).optional(),
-})
-  .min(1)
-  .unknown(true);
+  vendorName1: Joi.string().trim().min(1).max(100).optional(),
+  vendorName2: Joi.string().trim().min(1).max(100).optional(),
+  vendorName3: Joi.string().trim().min(1).max(100).optional(),
+}).unknown(true);
 
 // ---------------- GENERIC VALIDATOR ----------------
 export const validate =
