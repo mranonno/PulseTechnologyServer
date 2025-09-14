@@ -6,6 +6,7 @@ import authRoutes from "./routes/authRoutes";
 import productRoutes from "./routes/productRoutes";
 import soldProductRoutes from "./routes/soldProductRoutes";
 import priceListRoutes from "./routes/priceListRoutes";
+import stockHistoryRoutes from "./routes/stockHistoryRoutes";
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/price-list", priceListRoutes);
 app.use("/api/sold-products", soldProductRoutes);
+app.use("/api/stock-history", stockHistoryRoutes);
 
 // For Vercel serverless
 export default app;

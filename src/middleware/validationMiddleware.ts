@@ -45,6 +45,21 @@ export const updatePriceListSchema = Joi.object({
   vendorName3: Joi.string().trim().min(1).max(100).optional(),
 }).unknown(true);
 
+// ---------------- STOCK HISTORY VALIDATION ----------------
+export const addStockHistorySchema = Joi.object({
+  name: Joi.string().trim().min(1).max(200).required(),
+  date: Joi.date().optional(),
+  type: Joi.string().valid("in", "out").required(),
+  stockQuantity: Joi.number().integer().min(1).required(),
+  productId: Joi.string()
+    .regex(/^[0-9a-fA-F]{24}$/)
+    .required(),
+  image: Joi.string().uri().optional(),
+  user: Joi.object({
+    fullName: Joi.string().trim().min(1).max(100).required(),
+  }).required(),
+}).unknown(true);
+
 // ---------------- GENERIC VALIDATOR ----------------
 export const validate =
   (schema: ObjectSchema) =>
@@ -62,7 +77,9 @@ export const validate =
     next();
   };
 
+// ---------------- EXPORT VALIDATORS ----------------
 export const validateAddProduct = validate(addProductSchema);
 export const validateUpdateProduct = validate(updateProductSchema);
 export const validateAddPriceList = validate(addPriceListSchema);
 export const validateUpdatePriceList = validate(updatePriceListSchema);
+export const validateAddStockHistory = validate(addStockHistorySchema);
